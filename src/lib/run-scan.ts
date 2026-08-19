@@ -26,11 +26,41 @@ export function normalizeDomain(input: string): string {
   return d;
 }
 
+const BLOCKED_HOSTNAMES = new Set([
+  'localhost', 'local', 'internal', 'intranet', 'corp', 'metadata', 'instance-data',
+]);
+
+const BLOCKED_PATTERNS = [
+  /^169\.254\./, /^100\.64\./, /^10\./, /^172\.(1[6-9]|2\d|3[01])\./,
+  /^192\.168\./, /^127\./, /^0\./, /^::1$/, /^fc00:/i, /^fe80:/i,
+];
+
 export function isValidDomain(domain: string): boolean {
-  // Basic sanity check — not exhaustive, just enough to reject garbage input
-  // and prevent obviously malformed values from reaching the network layer.
   const pattern = /^(?!-)[a-z0-9-]{1,63}(?<!-)(\.[a-z0-9-]{1,63})+$/i;
-  return pattern.test(domain) && domain.length <= 253;
+  if (!pattern.test(domain) || domain.length > 253) return false;
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(domain)) return false;
+  const parts = domain.toLowerCase().split('.');
+  for (const part of parts) {
+    if (BLOCKED_HOSTNAMES.has(part)) return false;
+  }
+  if (BLOCKED_PATTERNS.some((p) => p.test(domain))) return false;
+  return true;
+}
+
+export async function isDomainSafeToScan(domain: string): Promise<boolean> {
+  try {
+    const { promises: dns } = await import('dns');
+    const addresses = await dns.resolve4(domain);
+    for (const ip of addresses) {
+      if (BLOCKED_PATTERNS.some((p) => p.test(ip))) {
+        console.warn(\`SSRF attempt blocked: \${domain} resolved to \${ip}\`);
+        return false;
+      }
+    }
+    return true;
+  } catch {
+    return true;
+  }
 }
 
 export async function runScan(rawInput: string): Promise<ScanReport> {

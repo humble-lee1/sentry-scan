@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { runScan, normalizeDomain, isValidDomain } from '@/lib/run-scan';
+import { runScan, normalizeDomain, isValidDomain, isDomainSafeToScan } from '@/lib/run-scan';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
 
 // Scans involve several outbound network calls (SSL handshake, HTTP fetches,
