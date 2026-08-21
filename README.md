@@ -140,7 +140,7 @@ The plan code in `src/lib/paystack.ts` (`SENTRY_SCAN_PLAN_CODE`) was created
 in Paystack's **Test Mode**. Before accepting real payments:
 
 1. Switch your Paystack dashboard out of Test Mode
-2. Recreate the same plan (₦15,000/month) in Live Mode — it will get a
+2. Recreate the same plan ($10/month) in Live Mode — it will get a
    different plan code
 3. Update `SENTRY_SCAN_PLAN_CODE` in `src/lib/paystack.ts` with the new code
 4. Replace `PAYSTACK_SECRET_KEY` and `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` in
