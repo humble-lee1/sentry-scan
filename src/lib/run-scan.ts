@@ -53,7 +53,7 @@ export async function isDomainSafeToScan(domain: string): Promise<boolean> {
     const addresses = await dns.resolve4(domain);
     for (const ip of addresses) {
       if (BLOCKED_PATTERNS.some((p) => p.test(ip))) {
-        console.warn(\`SSRF attempt blocked: \${domain} resolved to \${ip}\`);
+        console.warn(`SSRF attempt blocked: ${domain} resolved to ${ip}`);
         return false;
       }
     }
