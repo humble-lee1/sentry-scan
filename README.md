@@ -84,7 +84,7 @@ external AI or paid service involved yet.
 - No payment integration yet. The "Coming soon" monitoring button is a placeholder
   for when you add Paystack.
 
-## Monthly monitoring (paid: ₦15,000/month via Paystack)
+## Monthly monitoring (paid: $10/month via Paystack)
 
 On the results page, anyone can start monthly monitoring for a domain.
 This is a paid feature — checkout happens through Paystack, and the first
